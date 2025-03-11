@@ -8,12 +8,12 @@
     transition: transform 0.3s ease;
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 1px 21px 24px -6px rgba(0, 0, 0, 0.75);
 }
 
 .product:hover {
-    border: 1px solid #95A0A7;
-    transform: scale(1.05);
-    box-shadow: 1px 21px 24px -6px rgba(0, 0, 0, 0.75);
+    transform: translateY(-5px);
+   
 }
 
 .product img {

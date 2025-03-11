@@ -17,12 +17,12 @@ const Cart = ({ cart, handleClearCart, children }) => {
     const grandTotal = totalPrice + totalShipping + tax
     return (
         <div className='cart'>
-            <h3 style={{ textAlign: 'center', fontWeight: "400", fontSize: '25px' }}>Your Cart</h3>
+            <h3>Your Cart</h3>
             <p>Selected Items: {quantity}</p>
             <p>Total Price: ${totalPrice}</p>
             <p>Shipping Charge: ${totalShipping}</p>
             <p>Tax(5%): ${tax}</p>
-            <h4 style={{ fontSize: "21px", fontWeight: "400" }}>Grand Total: ${grandTotal}</h4>
+            <h4 >Grand Total: ${grandTotal}</h4>
             <button onClick={handleClearCart} className='btn-clear-cart'>Clear Cart <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon></button>
             <br />
             {children}

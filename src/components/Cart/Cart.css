@@ -2,6 +2,12 @@
     color: #2A414F;
 }
 
+.cart h3 h4 {
+    text-align: 'center';
+    font-weight: "400";
+    font-size: '25px';
+}
+
 .cart {
     position: sticky;
     top: 100px;
@@ -19,7 +25,7 @@
     border-radius: 4px;
     background: #EB5757;
     width: 100%;
-    margin: 0 auto;
+    margin: 0;
     height: 56px;
     color: white;
     font-size: 21px;
@@ -71,6 +77,10 @@
     }
 
     .btn-clear-cart span {
-        display: none; 
+        display: none;
     }
-} 
+
+    .cart p h3 {
+        margin: 0;
+    }
+}

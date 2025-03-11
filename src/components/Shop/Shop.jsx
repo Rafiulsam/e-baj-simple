@@ -1,75 +1,61 @@
-import  { useEffect, useState } from 'react';
-import './Shop.css'
+import { useEffect, useState } from 'react';
+import './Shop.css';
 import Product from '../Product/Product';
 import Cart from '../Cart/Cart';
 import { addToDb, deleteShoppingCart, getShoppingCart } from '../../utilities/fakedb';
-import { Link, useLoaderData } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { Link, useOutletContext } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
 const Shop = () => {
-    // const [products, setProducts] = useState([])
-    const products = useLoaderData()
-    const [cart, setCart] = useState([])
-    // useEffect(() => {
-    //     fetch('products.json')
-    //         .then(res => res.json())
-    //         .then(data => setProducts(data))
-    // }, [])
+    const { filteredProducts } = useOutletContext(); // Get filtered products from Home
+    const [cart, setCart] = useState([]);
 
     useEffect(() => {
-        const storedCart = getShoppingCart()
-        const savedCart = []
+        const storedCart = getShoppingCart();
+        const savedCart = [];
         for (const id in storedCart) {
-            const savedProducts = products.find(product => product.id === id)
-
-            if (savedProducts) {
+            const savedProduct = filteredProducts.find(product => product.id === id);
+            if (savedProduct) {
                 const quantity = storedCart[id];
-                savedProducts.quantity = quantity;
-                savedCart.push(savedProducts)
+                savedProduct.quantity = quantity;
+                savedCart.push(savedProduct);
             }
         }
-        setCart(savedCart)
-    }, [products])
+        setCart(savedCart);
+    }, [filteredProducts]);
 
     const handleAddToCart = (product) => {
         let newCart = [];
-        // const newCart = [...cart, product]
         const exists = cart.find(pd => pd.id === product.id);
         if (!exists) {
             product.quantity = 1;
-            newCart = [...cart, product]
-        }
-        else {
+            newCart = [...cart, product];
+        } else {
             exists.quantity = exists.quantity + 1;
             const remaining = cart.filter(pd => pd.id !== product.id);
             newCart = [...remaining, exists];
         }
-        setCart(newCart)
-        addToDb(product.id)
-    }
+        setCart(newCart);
+        addToDb(product.id);
+    };
 
     const handleClearCart = () => {
-        setCart([])
-        deleteShoppingCart()
-    }
+        setCart([]);
+        deleteShoppingCart();
+    };
 
     return (
         <div className="shop-container">
             <div className='products-container'>
-                {
-                    products.map(product => <Product key={product.id}
-                        product={product}
-                        handleAddToCart={handleAddToCart}
-                    ></Product>)
-                }
+                {filteredProducts.map(product => (
+                    <Product key={product.id} product={product} handleAddToCart={handleAddToCart} />
+                ))}
             </div>
             <div className="cart-container">
-                <Cart
-                    cart={cart}
-                    handleClearCart={handleClearCart}
-                >
+                <Cart cart={cart} handleClearCart={handleClearCart}>
                     <Link to='/reviewitems'>
-                        <button className='btn-proceed'>Review Items <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon></button>
+                        <button className='btn-proceed'>Review Items <FontAwesomeIcon icon={faArrowRight} /></button>
                     </Link>
                 </Cart>
             </div>
@@ -78,4 +64,3 @@ const Shop = () => {
 };
 
 export default Shop;
-

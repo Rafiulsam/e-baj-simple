@@ -1,15 +1,30 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import './Header.css'
 import logo from '../../images/Logo.svg'
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../Providers/AuthProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightFromBracket, faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons'
-const Header = () => {
 
+const categories = [
+    "All",
+    "Men's Sneaker",
+    "Men's Pants",
+    "Men's Boot",
+    "Bag",
+    "Cap",
+    "Earphones",
+    "Bottle"
+];
+
+const Header = ({ handleCategoryFilter }) => {
     const { user, logOut } = useContext(AuthContext)
-    console.log(user)
+    const [activeCategory, setActiveCategory] = useState("All");
 
+    const handleClick = (category) => {
+        setActiveCategory(category);
+        handleCategoryFilter(category);
+    };
     const handleSignOut = () => {
         logOut()
             .then(result => {
@@ -22,6 +37,17 @@ const Header = () => {
             <Link to='/'>
                 <img src={logo} alt="" />
             </Link>
+            <div className='navCategories'>
+                {categories.map(category => (
+                    <button 
+                        key={category} 
+                        onClick={() => handleClick(category)}
+                        className={activeCategory === category ? 'active' : ''}
+                    >
+                        {category}
+                    </button>
+                ))}
+            </div>
 
             <div className='navLink'>
                 <Link to="/">Home</Link>
