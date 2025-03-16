@@ -3,19 +3,20 @@ import './Shop.css';
 import Product from '../Product/Product';
 import Cart from '../Cart/Cart';
 import { addToDb, deleteShoppingCart, getShoppingCart } from '../../utilities/fakedb';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useLoaderData, useOutletContext } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const Shop = () => {
-    const { filteredProducts } = useOutletContext(); // Get filtered products from Home
+    const products = useLoaderData()
+    const { filteredProducts } = useOutletContext();
     const [cart, setCart] = useState([]);
 
     useEffect(() => {
         const storedCart = getShoppingCart();
         const savedCart = [];
         for (const id in storedCart) {
-            const savedProduct = filteredProducts.find(product => product.id === id);
+            const savedProduct = products.find(product => product.id === id);
             if (savedProduct) {
                 const quantity = storedCart[id];
                 savedProduct.quantity = quantity;
@@ -23,7 +24,7 @@ const Shop = () => {
             }
         }
         setCart(savedCart);
-    }, [filteredProducts]);
+    }, [products]);
 
     const handleAddToCart = (product) => {
         let newCart = [];
@@ -52,12 +53,12 @@ const Shop = () => {
                     <Product key={product.id} product={product} handleAddToCart={handleAddToCart} />
                 ))}
             </div>
-            <div className="cart-container">
-                <Cart cart={cart} handleClearCart={handleClearCart}>
-                    <Link to='/reviewitems'>
-                        <button className='btn-proceed'>Review Items <FontAwesomeIcon icon={faArrowRight} /></button>
-                    </Link>
-                </Cart>
+            <div className='cart-container'>
+            <Cart cart={cart} handleClearCart={handleClearCart}>
+                <Link to='/reviewitems'>
+                    <button className='btn-proceed'>Review Items <FontAwesomeIcon icon={faArrowRight} /></button>
+                </Link>
+            </Cart>
             </div>
         </div>
     );
